@@ -66,18 +66,47 @@ h3.group {
   font-size: .95rem; font-weight: 600; margin: 1.5rem 0 .5rem; color: var(--ink);
 }
 
+/* Width of the year gutter. It must clear the widest cell the data can produce, which is
+   a full range like "1998–2009" -- 9 characters plus an en dash at .78rem, about 3.9rem.
+   The gutter was 3.6rem and those ranges collided with the entry text; mentorship and
+   funding are where it showed, because their years are ranges and publications' are not.
+   Keep the two values in step: the entry's padding is this plus the column gap. */
+:root { --yr-col: 4.3rem; }
+
 ul.entries { list-style: none; margin: 0; padding: 0; }
 ul.entries li {
-  position: relative; padding: .42rem 0 .42rem 3.6rem;
+  position: relative; padding: .42rem 0 .42rem calc(var(--yr-col) + .9rem);
   border-bottom: 1px solid var(--rule); font-size: .95rem;
 }
 ul.entries li:last-child { border-bottom: none; }
 
 .yr {
-  position: absolute; left: 0; top: .48rem;
+  position: absolute; left: 0; top: .48rem; width: var(--yr-col);
+  white-space: nowrap; overflow: hidden;
   font-size: .78rem; color: var(--faint); font-variant-numeric: tabular-nums;
   font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
 }
+
+/* Banner on every page: the site is a migration in progress and says so. */
+p.construction {
+  margin: 0 0 1.75rem; padding: .7rem .9rem; font-size: .88rem; line-height: 1.5;
+  border: 1px solid var(--accent); border-left-width: 4px; border-radius: 3px;
+  background: var(--accent-soft); color: var(--ink);
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+p.construction strong { color: var(--accent); }
+
+/* The About page: prose bullets from profile.yaml, then counted figures. */
+ul.summary, ul.glance { list-style: none; margin: 0 0 1.5rem; padding: 0; }
+ul.summary li, ul.glance li {
+  position: relative; padding: .3rem 0 .3rem 1.1rem; font-size: .95rem;
+}
+ul.summary li::before, ul.glance li::before {
+  content: "—"; position: absolute; left: 0; color: var(--faint);
+}
+ul.glance li { font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: .9rem; }
+ul.glance strong { font-variant-numeric: tabular-nums; }
 
 .supervisee { text-decoration: underline; text-underline-offset: 2px; }
 
@@ -102,6 +131,7 @@ footer.site a { color: var(--muted); }
 @media (max-width: 34rem) {
   .wrap { padding: 1.75rem 1rem 3rem; }
   header.site h1 { font-size: 1.55rem; }
+  /* Narrow screens stack the year above the entry, so the gutter is not used at all. */
   ul.entries li { padding-left: 0; padding-top: 1.35rem; }
-  .yr { top: .1rem; }
+  .yr { top: .1rem; width: auto; }
 }
