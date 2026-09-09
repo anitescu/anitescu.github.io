@@ -122,6 +122,36 @@ p.note {
   font-family: system-ui, -apple-system, "Segoe UI", sans-serif; vertical-align: .07em;
 }
 
+/* Research interests: recorded talks, two per row where there is room for two.
+   The players are 16:9 and sized by the grid, not by the width attribute the embed
+   HTML carries -- an iframe with width="400" would otherwise refuse to shrink on a
+   phone and push the whole page sideways. */
+.videos {
+  display: grid; gap: 1.6rem 1.4rem; margin: 0 0 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
+}
+figure.video { margin: 0; display: flex; flex-direction: column; gap: .55rem; }
+figure.video .frame {
+  aspect-ratio: 16 / 9; background: var(--accent-soft);
+  border: 1px solid var(--rule); border-radius: 3px; overflow: hidden;
+}
+/* aspect-ratio is on the box, so the iframe simply fills it. Older engines that ignore
+   the property still get a usable player rather than a zero-height one. */
+figure.video iframe { display: block; width: 100%; height: 100%; min-height: 9rem; border: 0; }
+
+figure.video figcaption { display: flex; flex-direction: column; gap: .2rem; }
+figure.video .vtitle { font-size: .95rem; line-height: 1.35; }
+figure.video .vmeta, figure.video .vnote, figure.video .vlink {
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif; font-size: .82rem;
+}
+figure.video .vmeta { color: var(--muted); }
+figure.video .vnote { color: var(--faint); font-style: italic; }
+figure.video .vlink {
+  color: var(--accent); text-decoration: none; align-self: start;
+  border-bottom: 1px solid var(--rule);
+}
+figure.video .vlink:hover { border-bottom-color: var(--accent); }
+
 footer.site {
   margin-top: 3.5rem; padding-top: 1.1rem; border-top: 1px solid var(--rule);
   font-size: .82rem; color: var(--faint);
@@ -134,4 +164,5 @@ footer.site a { color: var(--muted); }
   /* Narrow screens stack the year above the entry, so the gutter is not used at all. */
   ul.entries li { padding-left: 0; padding-top: 1.35rem; }
   .yr { top: .1rem; width: auto; }
+  .videos { grid-template-columns: 1fr; }
 }
