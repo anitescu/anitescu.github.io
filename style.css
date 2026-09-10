@@ -153,37 +153,31 @@ figure.video .vlink {
 figure.video .vlink:hover { border-bottom-color: var(--accent); }
 
 /* --- personal ---------------------------------------------------------------------
-   Four illustrated notes, then the quotes. The photographs are 2006-08 point-and-shoot
-   frames of varying shape, so the image column is a fixed width and the picture is fitted
-   into a constant box rather than being allowed to set the row height itself -- otherwise
-   the tall graduation photo makes its row three times the height of the others. */
-ul.personal { list-style: none; margin: 0; padding: 0; }
+   Two bullet lists, facts then quotes, and no images on the page at all: the photographs
+   are reached by clicking the words that name them. Same dash marker as the About page's
+   bullets, so the two read as one house style. */
+ul.personal { list-style: none; margin: 0 0 .5rem; padding: 0; }
 ul.personal li {
-  display: grid; grid-template-columns: 15rem 1fr; gap: 1.15rem;
-  align-items: start; padding: 1.35rem 0; border-top: 1px solid var(--rule);
+  position: relative; padding: .35rem 0 .35rem 1.1rem; font-size: .95rem;
 }
-ul.personal li:first-child { border-top: 0; padding-top: .4rem; }
-ul.personal figure { margin: 0; display: flex; flex-direction: column; gap: .4rem; }
-ul.personal figure img {
-  display: block; width: 100%; height: 10rem; object-fit: cover;
-  border: 1px solid var(--rule); border-radius: 2px; background: var(--surface);
+ul.personal li::before {
+  content: "\2014"; position: absolute; left: 0; color: var(--faint);
 }
-ul.personal figure a:hover img { border-color: var(--accent); }
-ul.personal figcaption {
-  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
-  font-size: .8rem; line-height: 1.4; color: var(--faint); font-style: italic;
+/* A photo link is a bullet's only underlined text, so it has to read as clickable without
+   shouting; the dotted rule says "this opens a picture" where a solid one says "this
+   leaves the page". */
+ul.personal a {
+  color: var(--accent); text-decoration: none;
+  border-bottom: 1px dotted var(--accent);
 }
-ul.personal p { margin: 0; }
+ul.personal a:hover { border-bottom-style: solid; }
 
-ul.quotes { list-style: none; margin: 1.2rem 0 0; padding: 0; }
-ul.quotes li { padding: 0 0 1.1rem 1rem; border-left: 2px solid var(--accent-soft); }
-ul.quotes li + li { margin-top: .3rem; }
-ul.quotes blockquote { margin: 0; font-size: 1.02rem; line-height: 1.5; }
+ul.quotes li { padding-top: .45rem; padding-bottom: .45rem; }
 ul.quotes cite {
-  display: block; margin-top: .25rem; font-style: normal;
-  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
-  font-size: .82rem; color: var(--muted);
+  font-style: normal; color: var(--muted);
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif; font-size: .82rem;
 }
+ul.quotes cite::before { content: "\2014\00a0"; }
 
 footer.site {
   margin-top: 3.5rem; padding-top: 1.1rem; border-top: 1px solid var(--rule);
@@ -198,8 +192,4 @@ footer.site a { color: var(--muted); }
   ul.entries li { padding-left: 0; padding-top: 1.35rem; }
   .yr { top: .1rem; width: auto; }
   .videos { grid-template-columns: 1fr; }
-  /* One column: the photo goes full width and gets its natural-ish height back, since
-     there is no neighbouring row to stay level with. */
-  ul.personal li { grid-template-columns: 1fr; gap: .8rem; }
-  ul.personal figure img { height: auto; max-height: 15rem; }
 }
