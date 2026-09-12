@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Exponential Decay of Sensitivity in Optimization of Complex Systems — Mihai Anitescu</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="wrap">
+<header class="site">
+  <h1>Mihai Anitescu</h1>
+  <p class="tagline">Computational mathematics, optimization, and uncertainty quantification</p>
+  <ul class="affil"><li><span class="role">Senior Computational Mathematician</span>, Mathematics and Computer Science Division, Argonne National Laboratory</li><li><span class="role">Professor (Part-Time), tenured</span>, Department of Statistics, University of Chicago</li></ul>
+  <p class="contact"><a href="mailto:anitescu@mcs.anl.gov">anitescu@mcs.anl.gov</a> &nbsp;·&nbsp; <a href="http://www.mcs.anl.gov/~anitescu">http://www.mcs.anl.gov/~anitescu</a> &nbsp;·&nbsp; <a href="mihai-anitescu-cv.pdf">CV (PDF)</a></p>
+</header>
+<nav class="site"><a href="index.html">About</a><a href="research.html" aria-current="page">Research</a><a href="publications.html">Publications</a><a href="talks.html">Talks</a><a href="teaching.html">Teaching</a><a href="mentorship.html">Mentorship</a><a href="funding.html">Funding</a><a href="service.html">Service</a><a href="awards.html">Honors &amp; awards</a><a href="personal.html">Personal</a></nav>
+<main>
+<p class="construction"><strong>Under construction.</strong> These pages are generated from a migration of an older curriculum vitae and have not been fully verified. Entries may be incomplete, mis-dated or missing, and a hundred publications here were reconstructed from bibliographic databases rather than from the curriculum vitae itself.</p>
+
+<p class="crumb"><a href="research.html#s-topics">&#8592; Research interests</a></p>
+<nav class="onpage" aria-label="On this page"><a href="#open">Open problems</a><a href="#references">References</a></nav>
+<h2 class="section">Exponential Decay of Sensitivity in Optimization of Complex Systems</h2>
+<p class="lede">Why the solution of a structured optimization problem forgets distant data, and what that licenses: truncated horizons, decomposition with overlap, and local updates.</p>
+<div class="prose">
+  <p>Optimization problems that describe complex systems are almost never unstructured. Variables and constraints attach to the nodes of a graph -- instants of time along a control horizon, buses in a power network, cells in a spatial mesh -- and each constraint couples only nodes that are near one another. The question this line of work asks is what that locality is worth.</p>
+  <p>The answer is a decay estimate. Perturb the problem data at one node and the change it induces in the optimal solution at another falls off exponentially in the distance between the two nodes along the graph. The solution, in other words, forgets distant data at a definite rate.</p>
+  <p>What makes the estimate useful is that it is a property of the problem, not of any algorithm used to solve it. If the influence of distant data is exponentially small, then a long horizon may be truncated, a large network may be cut into overlapping subdomains solved independently, and a solution may be corrected locally as new data arrives -- and in each case the error incurred is exponentially small in the one quantity the user actually controls: the length of the horizon, the width of the overlap, the radius of the update.</p>
+  <p>The estimate was established first for nonlinear dynamic programming, where the graph is the time axis (Na and Anitescu, 2020), and then for graph-structured nonlinear programs in general (Shin, Anitescu and Zavala, 2022), under uniform regularity and second-order sufficiency conditions holding across the graph. The consequences run through the rest of the line of work: exponentially convergent receding-horizon control, whose error falls off in the length of the horizon (Xu and Anitescu, 2019); decomposition with overlap, converging at a rate that improves exponentially with the width of the overlap (Shin, Zavala and Anitescu, 2020; Na, Shin, Anitescu and Zavala, 2022); superconvergence of online optimization for model predictive control (Na and Anitescu, 2023); near-optimality of stochastic model predictive control (Shin, Na and Anitescu, 2026); and a continuous-time formulation in which the graph is no longer discrete (Zhao, Anitescu and Na, 2025).</p>
+</div>
+<h3 class="group" id="open">Open problems</h3>
+<ul class="open">
+  <li><strong>Where regularity fails.</strong> The decay estimates rest on a second-order sufficiency condition and a constraint qualification holding uniformly along the graph. Active sets change, and at those points the hypotheses do not hold uniformly. What survives -- a decay rate that degrades gracefully, a decay estimate on each side of the change, or nothing?</li>
+  <li><strong>The right notion of distance.</strong> Decay is measured in graph distance, which is the natural metric when coupling is sparse and local. Many systems couple densely but with low rank, or hierarchically. Is there a decay statement for those, and in what geometry is the distance measured?</li>
+  <li><strong>Mesh independence and the continuous limit.</strong> A decay constant that degrades as a discretization refines is of no use to the person refining it. The continuous-time overlapping Schwarz scheme for linear-quadratic problems is a first answer; the nonlinear and inequality-constrained case is open.</li>
+  <li><strong>Choosing the overlap.</strong> Theory says the error falls exponentially in the overlap width, but the rate and the constant are problem-dependent and are not observed directly. Can the overlap be chosen adaptively from quantities a solver can actually compute, rather than from a bound?</li>
+  <li><strong>Decay under uncertainty.</strong> Near-optimality of stochastic model predictive control settles one formulation. How does exponential decay interact with the sample complexity of scenario-based and data-driven formulations, where the data at a node is itself estimated?</li>
+  <li><strong>What it means for learned surrogates.</strong> If the solution map is exponentially local, then a surrogate that predicts it needs only a local receptive field. That is a statement about architecture and about how many samples such a surrogate should need, and neither has been drawn out.</li>
+</ul>
+<h3 class="group" id="references">References</h3>
+<p class="note">Underlined authors were students or postdoctoral researchers supervised by Mihai Anitescu at the time of the main part of the work.</p>
+<ul class="entries">
+  <li><span class="yr">2026</span><span class="supervisee">Shin, Sungho</span>, <span class="supervisee">Sen Na</span>, and Mihai Anitescu. "Near-Optimal Performance of Stochastic Model Predictive Control." Mathematics of Operations Research (2026). doi:10.1287/moor.2023.0159.</li>
+  <li><span class="yr">2025</span>Zhao, Hongli, Mihai Anitescu, and <span class="supervisee">Sen Na</span>. "Overlapping Schwarz Scheme for Linear-Quadratic Programs in Continuous Time." arXiv (Cornell University) (2025). doi:10.48550/arxiv.2510.04478.</li>
+  <li><span class="yr">2023</span><span class="supervisee">Na, Sen</span>, and Mihai Anitescu. "Superconvergence of Online Optimization for Model Predictive Control." IEEE Transactions on Automatic Control (2023). doi:10.1109/tac.2022.3223323.</li>
+  <li><span class="yr">2022</span><span class="supervisee">Shin, Sungho</span>, Mihai Anitescu, and Victor M. Zavala. "Exponential decay of sensitivity in graph-structured nonlinear programs." SIAM Journal on Optimization 32.2 (2022): 1156-1183. Awarded the 2023 W. David Smith, Jr. Graduate Student Paper Award given by the Computing and Systems Technology Division of the AIChE; to Sungho Shin.</li>
+  <li><span class="yr">2022</span><span class="supervisee">Na, Sen</span>, <span class="supervisee">Sungho Shin</span>, Mihai Anitescu, and <span class="supervisee">Victor M. Zavala</span>. "On the Convergence of Overlapping Schwarz Decomposition for Nonlinear Optimal Control." IEEE Transactions on Automatic Control (2022). doi:10.1109/tac.2022.3194087.</li>
+  <li><span class="yr">2020</span><span class="supervisee">Na, Sen</span>, and Mihai Anitescu. "Exponential decay in the sensitivity analysis of nonlinear dynamic programming." SIAM Journal on Optimization 30, no. 2 (2020): 1527-1554.</li>
+  <li><span class="yr">2020</span><span class="supervisee">Shin, Sungho</span>, Victor M. Zavala, and Mihai Anitescu. "Decentralized schemes with overlap for solving graph-structured optimization problems." IEEE Transactions on Control of Network Systems 7, no. 3 (2020): 1225-1236.</li>
+  <li><span class="yr">2019</span><span class="supervisee">Xu, Wanting</span>, and Mihai Anitescu. "Exponentially convergent receding horizon strategy for constrained optimal control." Vietnam Journal of Mathematics 47, no. 4 (2019): 897-929.</li>
+</ul>
+</main>
+<footer class="site">
+  <p>Generated from a single private data source on 2026-09-12. Not hand-edited.</p>
+</footer>
+</div>
+</body>
+</html>

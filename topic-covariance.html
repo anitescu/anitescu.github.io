@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Scalable algorithms for Covariance Computations and Gaussian Processes — Mihai Anitescu</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="wrap">
+<header class="site">
+  <h1>Mihai Anitescu</h1>
+  <p class="tagline">Computational mathematics, optimization, and uncertainty quantification</p>
+  <ul class="affil"><li><span class="role">Senior Computational Mathematician</span>, Mathematics and Computer Science Division, Argonne National Laboratory</li><li><span class="role">Professor (Part-Time), tenured</span>, Department of Statistics, University of Chicago</li></ul>
+  <p class="contact"><a href="mailto:anitescu@mcs.anl.gov">anitescu@mcs.anl.gov</a> &nbsp;·&nbsp; <a href="http://www.mcs.anl.gov/~anitescu">http://www.mcs.anl.gov/~anitescu</a> &nbsp;·&nbsp; <a href="mihai-anitescu-cv.pdf">CV (PDF)</a></p>
+</header>
+<nav class="site"><a href="index.html">About</a><a href="research.html" aria-current="page">Research</a><a href="publications.html">Publications</a><a href="talks.html">Talks</a><a href="teaching.html">Teaching</a><a href="mentorship.html">Mentorship</a><a href="funding.html">Funding</a><a href="service.html">Service</a><a href="awards.html">Honors &amp; awards</a><a href="personal.html">Personal</a></nav>
+<main>
+<p class="construction"><strong>Under construction.</strong> These pages are generated from a migration of an older curriculum vitae and have not been fully verified. Entries may be incomplete, mis-dated or missing, and a hundred publications here were reconstructed from bibliographic databases rather than from the curriculum vitae itself.</p>
+
+<p class="crumb"><a href="research.html#s-topics">&#8592; Research interests</a></p>
+<nav class="onpage" aria-label="On this page"><a href="#open">Open problems</a><a href="#references">References</a></nav>
+<h2 class="section">Scalable algorithms for Covariance Computations and Gaussian Processes</h2>
+<p class="lede">A Gaussian process with n observations carries an n-by-n covariance matrix, and the likelihood wants its inverse and its determinant. The work is in never forming it -- and in asking a statistical question about the approximation rather than a numerical one.</p>
+<div class="prose">
+  <p>A Gaussian process is the default model for data indexed by space and time, and its cost is the reason it is so often abandoned. Fitting one by maximum likelihood requires the log-determinant of an n-by-n covariance matrix and the solution of linear systems in it: cubic work and quadratic storage. At the sizes that modern sensing produces -- satellite swaths, high-frequency monitoring, a power grid instrumented at every bus -- the matrix cannot be formed, let alone factored.</p>
+  <p>The organizing idea of this work is that the matrix should never be formed. What an algorithm needs from a covariance matrix is products with vectors, and those can be computed in nearly linear time by exploiting the structure of the kernel; the traces and determinants that the likelihood needs can then be estimated stochastically from those products. That replaces an exact cubic computation with an inexact nearly linear one.</p>
+  <p>Inexact, however, raises the question that shapes the rest of the programme, and it is a statistical question rather than a numerical one. The usual criterion -- how close is the computed estimate to the exact maximum likelihood estimate -- is the wrong one to optimize, because the exact estimate is itself only an estimate of a parameter. The right criterion is whether the cheap estimator retains the statistical efficiency of the expensive one. It can: the stochastic score-function estimators are consistent and, with enough sample vectors, asymptotically as efficient as exact maximum likelihood. This is what licenses spending a computational budget on statistical accuracy rather than on numerical accuracy, and it is the part most easily lost when the algorithms are described alone.</p>
+  <p>The rest is the machinery that makes the products fast and the estimators well conditioned: tree codes that sum Matern kernels in nearly linear time (Chen, Wang and Anitescu, 2014), difference-filter preconditioners that make the linear systems tractable (Stein, Chen and Anitescu, 2012), estimating equations that avoid the inverse altogether (Anitescu, Chen and Stein, 2017), and hierarchical matrix representations that compress the far field (Geoga, Anitescu and Stein, 2020) and extend to nonstationary kernels (Beckman, Geoga, Stein and Anitescu, 2023). Together they carry the same statistical model from thousands of observations to millions.</p>
+  <p>A parallel line asks where the covariance function itself should come from. A parametric family chosen for convenience is a modeling assumption like any other, and often a poor one when the field being observed obeys known physics. Covariance models derived from the governing equations (Constantinescu and Anitescu, 2013) -- including ones available only implicitly, through a solver rather than a formula (Chen and Anitescu, 2021, 2023) -- keep the physics and give up the closed form, which is exactly the trade the scalable machinery above is built to absorb.</p>
+</div>
+<h3 class="group" id="open">Open problems</h3>
+<ul class="open">
+  <li>Smoothness is the parameter that matters and the one least pinned down. Matern smoothness controls prediction, interpolation error and the behaviour of every approximation built on the kernel, and it is the hardest parameter to identify from data under infill asymptotics. What is the efficiency cost of estimating it jointly, and which approximations degrade gracefully when it is misspecified?</li>
+  <li><strong>A joint theory of statistical and computational error.</strong> Stochastic trace estimation, hierarchical compression and iterative solution each introduce error with its own knob. These are currently tuned separately against numerical tolerances. What is the frontier that trades all of them against the statistical efficiency of the resulting estimator, and can a solver be told a statistical target instead of a numerical one?</li>
+  <li><strong>Honest uncertainty for a randomized estimator.</strong> When the estimate depends on random probe vectors, the reported standard error must account for both sampling variability and algorithmic randomness. Reporting only the first is a systematic understatement, and it is not clear how large it is in practice.</li>
+  <li><strong>Nonstationarity without hand-designed structure.</strong> Hierarchical representations extend to nonstationary kernels, but the nonstationarity still has to be specified. Can it be learned at scale, and what identifiability remains when both the mean and the local covariance are flexible?</li>
+  <li><strong>Implicit physics-based covariance.</strong> When the covariance is defined by a solver, everything the estimator needs must come through that solver -- derivatives included. What is the right interface, how do adjoint and automatic-differentiation costs enter the scaling, and what happens when the solver is itself approximate?</li>
+  <li><strong>Structured decompositions beyond low rank.</strong> Low rank plus diagonal is a sharper description of many empirical covariances than either piece alone, and it is a nonconvex problem with an unclear identifiability theory. When is the decomposition unique, and when does a spectral initialization land in the right basin?</li>
+  <li><strong>Covariance estimation inside a decision.</strong> A covariance model is usually fitted and then used, but the use is often an optimization problem whose solution is what the estimate is really for. Which features of the covariance does the decision actually depend on, and should the estimator be aimed at those rather than at the likelihood?</li>
+</ul>
+<h3 class="group" id="references">References</h3>
+<p class="note">Underlined authors were students or postdoctoral researchers supervised by Mihai Anitescu at the time of the main part of the work.</p>
+<ul class="entries">
+  <li><span class="yr">2025</span>Yeon, Kingsley, and Mihai Anitescu. "Beyond Low Rank: Fast Low-Rank + Diagonal Decomposition with a Spectral Approach." arXiv (Cornell University) (2025). doi:10.48550/arxiv.2512.17120.</li>
+  <li><span class="yr">2023</span><span class="supervisee">Beckman, Paul</span> G., <span class="supervisee">Christopher J. Geoga</span>, Michael L. Stein, and Mihai Anitescu. "Scalable computations for nonstationary Gaussian processes." Statistics and Computing (2023). doi:10.1007/s11222-023-10252-0.</li>
+  <li><span class="yr">2023</span><span class="supervisee">Chen, Yian</span>, and Mihai Anitescu. "Scalable Physics-Based Maximum Likelihood Estimation Using Hierarchical Matrices." SIAM/ASA Journal on Uncertainty Quantification (2023). doi:10.1137/21m1458880.</li>
+  <li><span class="yr">2021</span><span class="supervisee">Chen, Yian</span>, and Mihai Anitescu. "SCALABLE GAUSSIAN PROCESS ANALYSIS FOR IMPLICIT PHYSICS-BASED COVARIANCE MODELS." International Journal for Uncertainty Quantification (2021). doi:10.1615/int.j.uncertaintyquantification.2021036657.</li>
+  <li><span class="yr">2021</span><span class="supervisee">Lenzi, Amanda</span>, <span class="supervisee">Julie Bessac</span>, and Mihai Anitescu. "Power grid frequency prediction using spatiotemporal modeling." Statistical Analysis and Data Mining: The ASA Data Science Journal (2021). doi:10.1002/sam.11535.</li>
+  <li><span class="yr">2020</span><span class="supervisee">Geoga, Christopher J.</span>, Mihai Anitescu, and Michael L. Stein. "Scalable Gaussian process computations using hierarchical matrices." Journal of Computational and Graphical Statistics 29, no. 2 (2020): 227-237.</li>
+  <li><span class="yr">2020</span><span class="supervisee">Geoga, Christopher J.</span>, Mihai Anitescu, and Michael L. Stein. "Flexible nonstationary spatio-temporal modeling of high-frequency monitoring data". To appear in Environmetrics. arXiv preprint arXiv:2007.11418 (2020).</li>
+  <li><span class="yr">2017</span>Anitescu, Mihai, <span class="supervisee">Jie Chen</span>, and Michael L. Stein. "An inversion-free estimating equations approach for gaussian process models." Journal of Computational and Graphical Statistics 26.1 (2017): 98-107.</li>
+  <li><span class="yr">2014</span><span class="supervisee">Jie Chen</span>, <span class="supervisee">Lei Wang</span>, And Mihai Anitescu. "A Fast Summation Tree Code For Matern Kernel", SIAM J. SCI. COMPUT., Vol. 36, No. 1, pp. A289–A309, 2014. Also Preprint ANL/MCS-P4001-1212.</li>
+  <li><span class="yr">2013</span>Michael L. Stein, <span class="supervisee">Jie Chen</span> and Mihai Anitescu, "STOCHASTIC APPROXIMATION OF SCORE FUNCTIONS FOR GAUSSIAN PROCESSES",Annals of Applied Statistics, Volume 7, Number 2 (2013), 1162-1191. Preprint ANL/MCSP-2091-0512.</li>
+  <li><span class="yr">2013</span>Emil M Constantinescu and Mihai Anitescu, "Physics-Based Covariance Models For Gaussian Processes With Multiple Outputs". International Journal on Uncertainty Quantification, Volume 3, No 1, pp 47-71, 2013. Preprint ANL/MCS-P1915-0711.</li>
+  <li><span class="yr">2012</span>Mihai Anitescu, <span class="supervisee">Jie Chen</span>, and <span class="supervisee">Lei Wang</span>, "A Matrix-Free Approach For Solving The Gaussian Process Maximum Likelihood Problem". SIAM Journal on Scientific Computing 2012, Vol. 34, No. 1, pp. A240-A262. Preprint ANL/MCS-P1857-0311.</li>
+  <li><span class="yr">2012</span>Michael Stein, <span class="supervisee">Jie Chen</span>, and Mihai Anitescu. "Difference Filter Preconditioning For Large Covariance Matrices". SIAM Journal on Matrix Analysis and Applications Vol. 33, No. 1, pp. 52-72, 2012. Preprint ANL/MCS-1888-0511.</li>
+</ul>
+</main>
+<footer class="site">
+  <p>Generated from a single private data source on 2026-09-12. Not hand-edited.</p>
+</footer>
+</div>
+</body>
+</html>

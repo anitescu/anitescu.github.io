@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Modeling and Optimization of Complex Energy Systems — Mihai Anitescu</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="wrap">
+<header class="site">
+  <h1>Mihai Anitescu</h1>
+  <p class="tagline">Computational mathematics, optimization, and uncertainty quantification</p>
+  <ul class="affil"><li><span class="role">Senior Computational Mathematician</span>, Mathematics and Computer Science Division, Argonne National Laboratory</li><li><span class="role">Professor (Part-Time), tenured</span>, Department of Statistics, University of Chicago</li></ul>
+  <p class="contact"><a href="mailto:anitescu@mcs.anl.gov">anitescu@mcs.anl.gov</a> &nbsp;·&nbsp; <a href="http://www.mcs.anl.gov/~anitescu">http://www.mcs.anl.gov/~anitescu</a> &nbsp;·&nbsp; <a href="mihai-anitescu-cv.pdf">CV (PDF)</a></p>
+</header>
+<nav class="site"><a href="index.html">About</a><a href="research.html" aria-current="page">Research</a><a href="publications.html">Publications</a><a href="talks.html">Talks</a><a href="teaching.html">Teaching</a><a href="mentorship.html">Mentorship</a><a href="funding.html">Funding</a><a href="service.html">Service</a><a href="awards.html">Honors &amp; awards</a><a href="personal.html">Personal</a></nav>
+<main>
+<p class="construction"><strong>Under construction.</strong> These pages are generated from a migration of an older curriculum vitae and have not been fully verified. Entries may be incomplete, mis-dated or missing, and a hundred publications here were reconstructed from bibliographic databases rather than from the curriculum vitae itself.</p>
+
+<p class="crumb"><a href="research.html#s-topics">&#8592; Research interests</a></p>
+<nav class="onpage" aria-label="On this page"><a href="#open">Open problems</a><a href="#references">References</a></nav>
+<h2 class="section">Modeling and Optimization of Complex Energy Systems</h2>
+<p class="lede">The power grid is where continuous physics, discrete commitments, weather uncertainty and a market that must clear all meet in one problem. The mathematics is in the interaction, not in any one of them.</p>
+<div class="prose">
+  <p>An electric power system is not a hard optimization problem with some physics attached. It is four hard problems that have to be solved as one. The network obeys nonconvex algebraic equations and fast differential dynamics; the generators are switched on and off, which makes the decisions discrete; the supply and the demand are uncertain, and increasingly so as wind and solar displace dispatchable generation; and the whole thing is coordinated by a market whose prices have to mean something. Each piece has a mature literature. The interactions are where the open questions are, and a recent eleven-author statement of them (Anderson and others, 2025) is a fair map of the field as it stands.</p>
+  <p>The entry point for this work was the uncertainty, and specifically the observation that a weather forecast is not a number. Forecasts arrive with error structure -- correlated in space, correlated in time, and heteroscedastic -- and a unit commitment that consumes only the forecast mean throws that structure away. Building the forecast error model into the stochastic program, rather than sampling scenarios from a convenient distribution, changes both the commitment and the reserve it implies (Zavala, Constantinescu, Krause and Anitescu, 2009; Constantinescu, Zavala, Rocklin, Lee and Anitescu, 2011).</p>
+  <p>Solving the resulting problems at operational scale has been the second thread, and it has repeatedly turned out to be a modeling question disguised as a computational one. Stochastic unit commitment with a useful number of scenarios is a structured problem whose structure is what makes it tractable, and decomposing it along that structure is what puts it on a parallel machine at all (Petra, Schenk and Anitescu, 2014). That structure appears to be the same graph structure the exponential-decay results on the companion page describe, which would explain why the decomposition works as well as it does -- but the correspondence is a conjecture here and not a theorem, and establishing it is open. More recently the constraint has moved to hardware: interior-point methods condensed to run in the reduced space of a GPU (Pacaud, Maldonado, Shin, Schanen and Anitescu, 2022; Shin, Anitescu and Pacaud, 2024) make formulations affordable that were previously avoided, and that reopens the formulation question rather than closing it.</p>
+  <p>The third thread is risk, and it is the one where the grid is least like a textbook stochastic program. The events that matter -- cascading outages, protection misoperation, a contingency that propagates -- are rare, correlated, and mediated by discrete switching, so their probabilities cannot be estimated by sampling the scenarios one would use to size reserves. Treating failure probability as a constraint on the operating point (Subramanyam, Roth, Lam and Anitescu, 2022), simulating cascades with methods built for rare events (Roth, Barajas-Solano, Stinis, Weare and Anitescu, 2019), and estimating outage statistics from utility records rather than from models (Dobson, Maldonado and Anitescu, 2026) are three different attacks on the same gap between what is optimized and what actually goes wrong; posing efficiency and risk as two objectives rather than one (Rossmann and others, 2025) is a fourth.</p>
+  <p>Underneath all of it is the market. A price that is consistent under uncertainty is a formulation question, not a computational one, and the answer determines whether the efficient dispatch is also the one participants will choose (Zavala, Kim, Anitescu and Birge, 2017). As storage, low inertia and weather-driven supply make the physical problem more stochastic, the pricing question stops being separable from it.</p>
+</div>
+<h3 class="group" id="open">Open problems</h3>
+<ul class="open">
+  <li><strong>Chance constraints that survive AC feasibility.</strong> Probabilistic constraints are tractable under linearized flow and honest only under the full AC equations. Closing that gap at operational scale, with guarantees rather than heuristic tightenings, remains open.</li>
+  <li><strong>Rare events are not a sampling problem.</strong> The probability that matters is of a cascade no scenario set contains. What is the right coupling between rare-event simulation, the statistics estimated from utility outage records, and the operating decision that is supposed to account for them?</li>
+  <li><strong>Discrete, stochastic and AC at once.</strong> Unit commitment is a mixed-integer program, the uncertainty makes it a stochastic one, and the physics makes it nonconvex. Any two of the three are hard and solvable; all three together are still out of reach at realistic size.</li>
+  <li><strong>Time scales in one model.</strong> Protection acts in cycles, dispatch in minutes, commitment in hours, investment in decades, and the green transition couples them -- a capacity decision now is judged by dynamic behaviour milliseconds long. There is no satisfactory formulation that spans even three of these.</li>
+  <li><strong>Prices for a system that is mostly uncertainty.</strong> Consistent pricing under a stochastic clearing formulation is settled for one model. It is not settled for storage, for low-inertia systems where frequency response is itself a product, or for markets whose participants hold their own forecasts.</li>
+  <li><strong>Hardware as a modeling constraint.</strong> GPU-resident solvers change which formulations are cheap, and the profession has not re-asked which formulation it would choose if condensed interior-point methods were the default. The answer probably is not the one chosen when sparse factorization was.</li>
+  <li><strong>Calibration of the models being optimized.</strong> Dynamic grid models are fitted to events, then trusted in optimization. Data assimilation for those models, with uncertainty that propagates into the decision rather than stopping at the fit, is largely missing.</li>
+</ul>
+<h3 class="group" id="references">References</h3>
+<p class="note">Underlined authors were students or postdoctoral researchers supervised by Mihai Anitescu at the time of the main part of the work.</p>
+<ul class="entries">
+  <li><span class="yr">2026</span>Dobson, Ian, D. Adrian Maldonado, and Mihai Anitescu. "The Statistical Spread of Transmission Outages on a Fast Protection Time Scale Based on Utility Data." IEEE Transactions on Power Systems (2026). doi:10.1109/tpwrs.2025.3596141.</li>
+  <li><span class="yr">2025</span>Rossmann, Ramsey, Mihai Anitescu, <span class="supervisee">Julie Bessac</span>, Michael Ferris, <span class="supervisee">Mitchell Krock</span>, James Luedtke, and Line Roald. "A framework for balancing power grid efficiency and risk with bi-objective stochastic integer optimization." Optimization and Engineering (2025). doi:10.1007/s11081-024-09944-x.</li>
+  <li><span class="yr">2025</span>Anderson, Edward, Michael Ferris, Andrew Philpott, Mihai Anitescu, Peter Cramton, Sijia Geng, Richard Green, Tito Homem-de-Mello, Olivier Huber, Vincent Leclère, and Ramteen Sioshansi. "Ten challenges for mathematical modeling of the green-energy transition." Current Sustainable/Renewable Energy Reports (2025). doi:10.1007/s40518-025-00274-9.</li>
+  <li><span class="yr">2024</span><span class="supervisee">Shin, Sungho</span>, Mihai Anitescu, and <span class="supervisee">François Pacaud</span>. "Accelerating optimal power flow with GPUs: SIMD abstraction of nonlinear programs and condensed-space interior-point methods." Electric Power Systems Research (2024). doi:10.1016/j.epsr.2024.110651.</li>
+  <li><span class="yr">2022</span><span class="supervisee">Pacaud, François</span>, Daniel Adrian Maldonado, <span class="supervisee">Sungho Shin</span>, <span class="supervisee">Michel Schanen</span>, and Mihai Anitescu. "A feasible reduced space method for real-time optimal power flow." Electric Power Systems Research (2022). doi:10.1016/j.epsr.2022.108268.</li>
+  <li><span class="yr">2022</span><span class="supervisee">Subramanyam, Anirudh</span>, <span class="supervisee">Jacob Roth</span>, <span class="supervisee">Albert Lam</span>, and Mihai Anitescu. "Failure Probability Constrained AC Optimal Power Flow." IEEE Transactions on Power Systems (2022). doi:10.1109/tpwrs.2022.3146377.</li>
+  <li><span class="yr">2019</span><span class="supervisee">Roth, Jacob</span>, David A. Barajas-Solano, Panos Stinis, Jonathan Weare, and Mihai Anitescu. "A Kinetic Monte Carlo Approach for Simulating Cascading Transmission Line Failure." To appear in SIAM Journal on Multiscale Modeling and Simulation. arXiv preprint arXiv:1912.08081 (2019).</li>
+  <li><span class="yr">2017</span>Zavala, Victor M., <span class="supervisee">Kibaek Kim</span>, Mihai Anitescu, and John Birge. "A stochastic electricity market clearing formulation with consistent pricing properties." Operations Research 65, no. 3 (2017): 557-576.</li>
+  <li><span class="yr">2014</span>Cosmin G. Petra, Olaf Schenk, Mihai Anitescu. "Real-time Stochastic Optimization of Complex Energy Systems on High Performance Computers". Computing in Science and Engineering, Issue No.05 - Sept.-Oct. (2014 vol.16) pp: 32-42. Preprint ANL/MCS-P4068-0413.</li>
+  <li><span class="yr">2011</span><span class="supervisee">Emil Constantinescu</span>, <span class="supervisee">Victor Zavala</span>, <span class="supervisee">Matthew Rocklin</span>, <span class="supervisee">Sangmin Lee</span>, and Mihai Anitescu. "A Computational Framework for Uncertainty Quantification and Stochastic Optimization in Unit Commitment with Wind Power Generation". IEEE Transactions on Power Systems, 26(1), pp. 431–441 (2011). Also, Preprint ANL/MCS-P1681-1009.</li>
+  <li><span class="yr">2009</span><span class="supervisee">Zavala, Victor</span> M., <span class="supervisee">Emil M. Constantinescu</span>, Theodore Krause, and Mihai Anitescu. "On-line economic optimization of energy systems using weather forecast information." Journal of Process Control (2009). doi:10.1016/j.jprocont.2009.07.004.</li>
+</ul>
+</main>
+<footer class="site">
+  <p>Generated from a single private data source on 2026-09-12. Not hand-edited.</p>
+</footer>
+</div>
+</body>
+</html>
